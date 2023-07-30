@@ -33,6 +33,7 @@ jobs:
           
       - name: Git Semantic Version
         uses: PaulHatch/semantic-version@v4.0.3
+        id: tag_version
         with:
           # The prefix to use to identify tags
           tag_prefix: "v"
@@ -43,6 +44,13 @@ jobs:
           minor_pattern: "feat:"
           # A string to determine the format of the version output
           format: "${major}.${minor}.${patch}-prerelease${increment}"
+          
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.version }}
+          name: Release ${{ steps.tag_version.outputs.version }}
+          body: ${{ steps.tag_version.outputs.version }}  
           
     
     
